@@ -8,7 +8,6 @@ class Command(BaseCommand):
         file_path = 'C:/Users/LENOVO/Desktop/Intern/csv/myproject/interview_test.csv'
         data = pd.read_csv(file_path)
         for _, row in data.iterrows():
-            # Skip rows where 'Population' is NaN
             if pd.isna(row['population']):
                 print(f"Skipping row with missing population: {row}")
                 continue
@@ -18,7 +17,7 @@ class Command(BaseCommand):
                 description=row['description'],
                 city=row['city'],
                 state=row['state'],
-                population=int(row['population'] or 0),  # Replace NaN with 0 if necessary
-                latitude=row.get('latitude', 0.0),  # Handle missing latitude
-                longitude=row.get('longitude', 0.0)  # Handle missing longitude
+                population=int(row['population'] or 0),  
+                latitude=row.get('latitude', 0.0),  
+                longitude=row.get('longitude', 0.0)  
             )

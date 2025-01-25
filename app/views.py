@@ -65,25 +65,23 @@ class JobRoleClusterView(APIView):
                     cluster_found = True
                     break
 
-            # If no cluster is found, create a new one
+           
             if not cluster_found:
                 clusters.append({
                     'center': job_location,
-                    'role': job_role,  # Use extracted role (LPN or RN)
+                    'role': job_role,  
                     'jobs': [job],
                     'population': job.population,
                     'job_count': 1,
-                    'cities': {job.city},  # Use a set to avoid duplicates
-                    'states': {job.state},  # Use a set to avoid duplicates
+                    'cities': {job.city},  
+                    'states': {job.state},  
                 })
 
-        # Prepare response data with improved location formatting
+        
         result = []
         for cluster in clusters:
             city_list = list(cluster['cities'])
             state_list = list(cluster['states'])
-
-            # Format the location with top 3 cities and state
             if len(city_list) > 3:
                 location = f"{', '.join(city_list[:3])}, and {len(city_list) - 3} more cities, {', '.join(state_list)}"
             else:
@@ -99,10 +97,6 @@ class JobRoleClusterView(APIView):
         return Response(result)
 
     def get_role_from_title(self, title):
-        """
-        Extract role (LPN or RN) from job title.
-        Default to 'Other' if neither is found.
-        """
         if 'LPN' in title.upper():
             return 'LPN'
         elif 'RN' in title.upper():
@@ -114,14 +108,11 @@ class JobRoleClusterView(APIView):
 
 class RoleDistributionView(APIView):
     def get(self, request):
-        # Group by role, city, and state and calculate counts and total population
         data = (
             Job.objects.values("title", "city", "state")
             .annotate(job_count=Count("id"), total_population=Sum("population"))
             .order_by("state", "city", "title")
         )
-
-        # Transform the data into a list of dictionaries
         result = [
             {
                 "role": item["title"],
@@ -138,17 +129,14 @@ class RoleDistributionView(APIView):
 
 class RoleDistributionPerStateView(APIView):
     def get(self, request):
-        # Group by role and state, calculate job count and number of cities
         data = (
             Job.objects.values("title", "state")
             .annotate(
                 job_count=Count("id"),
-                job_cities=Count("city", distinct=True)  # Count distinct cities
+                job_cities=Count("city", distinct=True) 
             )
             .order_by("state", "title")
         )
-
-        # Transform the data into a list of dictionaries
         result = [
             {
                 "role": item["title"],

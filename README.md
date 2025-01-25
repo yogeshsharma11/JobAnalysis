@@ -63,25 +63,3 @@ This project is a Django Rest Framework (DRF) application designed to provide an
 ### Testing the API
 Use Postman or a browser to test the endpoints. For example:
 - `http://127.0.0.1:8000/api/analytics/roles-distribution/`
-
-### Example Response
-**Roles Distribution by Location**:
-```json
-[
-    {
-        "role": "RN",
-        "location": "Austin, Dallas, Houston, and 5 more cities, Texas",
-        "job_count": 12,
-        "population": 800000
-    },
-    {
-        "role": "LPN",
-        "location": "Orlando, Gotha, Maitland, and 3 more cities, Florida",
-        "job_count": 8,
-        "population": 450000
-    }
-]
-```
-
-
-
